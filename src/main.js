@@ -7,9 +7,11 @@ import 'element-ui/lib/theme-chalk/index.css'
 import router from './router'
 import axios from 'axios'
 
-Vue.prototype.$http=axios
+Vue.config.debug = true
+Vue.prototype.$http = axios
 Vue.config.productionTip = false
 Vue.use(ElementUI);
+axios.defaults.withCredentials = true
 
 
 /* eslint-disable no-new */
@@ -18,4 +20,18 @@ new Vue({
   router,
   components: { App },
   template: '<App/>'
+})
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.needLogin) {
+    console.log('需登录');
+  } else {
+    next()
+  }
+  if (sessionStorage.getItem('Authorization') != null) {
+    next()
+  } else {
+    //session为空，重定向到登录界面
+    next('/')
+  }
 })

@@ -122,12 +122,18 @@ export default {
             }
           })
             .then(response => {
-              console.log(response);
               if (response.data.code === 0) {
-                this.$message({
-                  message: "登陆成功",
-                  type: "success"
-                });
+                debugger;
+                // this.$message({
+                //   message: "登陆成功",
+                //   type: "success"
+                // });
+                //将token设置到session当中
+
+                var session = window.sessionStorage;
+                var token = JSON.stringify(response.data.data.Authorization);
+                session.setItem("Authorization", token);
+                this.$router.push("/helloWorld");
               } else {
                 this.$message({
                   message: "登陆失败，请检查用户名账号密码",
