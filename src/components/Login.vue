@@ -7,16 +7,29 @@
       <el-form
         ref="AccountForm"
         :model="AccountForm"
-        rules="rules"
+        status-icon
+        :rules="rules"
         class="demo-ruleForm login-container"
       >
         <div class="sub-title">登陆</div>
         <div class="formGroup">
-          <el-form-item label="账号" prop="user">
-            <el-input type="text" auto-complete="off" placeholder="请输入您的账号" class="form-control"></el-input>
+          <el-form-item label="账号" prop="userName">
+            <el-input
+              type="text"
+              v-model="AccountForm.userName"
+              auto-complete="off"
+              placeholder="请输入您的账号"
+              class="form-control"
+            ></el-input>
           </el-form-item>
           <el-form-item label="密码" prop="password" class="form-inline">
-            <el-input type="password" auto-complete="off" placeholder="请输入密码" class="form-control"></el-input>
+            <el-input
+              type="password"
+              v-model="AccountForm.password"
+              auto-complete="off"
+              placeholder="请输入密码"
+              class="form-control"
+            ></el-input>
           </el-form-item>
         </div>
         <div class="remFor">
@@ -29,8 +42,18 @@
 
         <div class="formButton">
           <el-form-item style="width:100%;">
-            <el-button type="primary" style="width:40%;">重置</el-button>
-            <el-button type="primary" style="width:45%;" @click="login">登录</el-button>
+            <el-button
+              type="primary"
+              style="width:40%;"
+              @click="resetForm('AccountForm')"
+              icon="el-icon-circle-close-outline"
+            >重置</el-button>
+            <el-button
+              type="primary"
+              style="width:45%;"
+              @click="submitLogin('AccountForm')"
+              icon="el-icon-upload"
+            >登录</el-button>
           </el-form-item>
         </div>
       </el-form>
@@ -40,8 +63,22 @@
 
 <script>
 export default {
-  name: "登录",
+  name: "login",
   data() {
+    var validateUserName = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请输入账号"));
+      } else {
+        callback();
+      }
+    };
+    var validatePassword = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请输入密码"));
+      } else {
+        callback();
+      }
+    };
     return {
       logining: false,
       note: {
@@ -54,17 +91,17 @@ export default {
         backgroundSize: "100% 100%",
         backgroundRepeat: "no-repeat"
       },
-      account: {
-        username: "",
+      AccountForm: {
+        userName: "",
         password: ""
       },
       rules: {
-        username: [
-          { required: true, message: "请输入账号", trigger: "blur" }
+        userName: [
+          { validator: validateUserName, trigger: "blur" }
           //{ validator: validaePass }
         ],
         password: [
-          { required: true, message: "请输入密码", trigger: "blur" }
+          { validator: validatePassword, trigger: "blur" }
           //{ validator: validaePass2 }
         ]
       },
@@ -72,7 +109,36 @@ export default {
     };
   },
   methods: {
-    
+    submitLogin(formName) {
+      this.$refs[formName].validate(valid => {
+        //var userVo = JSON.stringify(this.AccountForm);
+        if (valid) {
+          this.$http
+            .post("/api/zzh/login", {
+              'userName':this.AccountForm.userName,
+              'password':this.AccountForm.password
+            })
+            .then(response => {
+              if (response.status === 200) {
+                // this.$message({
+                //   message: '登陆成功',
+                //   type: 'success'
+                // })
+              }
+            })
+            .catch(function(error) {
+              console.log(error);
+            });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    //清空表单
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
+    }
   }
 };
 </script>
@@ -133,5 +199,8 @@ label {
 }
 .formButton {
   padding-left: 25px;
+}
+.el-form-item__error {
+  margin-left: 77px;
 }
 </style>

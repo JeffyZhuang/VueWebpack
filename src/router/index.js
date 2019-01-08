@@ -8,8 +8,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: '登录',
+      name: 'login',
       component: Login
-    }
+    },
   ]
 })
