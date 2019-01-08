@@ -113,17 +113,26 @@ export default {
       this.$refs[formName].validate(valid => {
         //var userVo = JSON.stringify(this.AccountForm);
         if (valid) {
-          this.$http
-            .post("/api/zzh/login", {
-              'userName':this.AccountForm.userName,
-              'password':this.AccountForm.password
-            })
+          this.$http({
+            method: "post",
+            url: "/api/zzh/login",
+            data: {
+              userName: this.AccountForm.userName,
+              password: this.AccountForm.password
+            }
+          })
             .then(response => {
-              if (response.status === 200) {
-                // this.$message({
-                //   message: '登陆成功',
-                //   type: 'success'
-                // })
+              console.log(response);
+              if (response.data.code === 0) {
+                this.$message({
+                  message: "登陆成功",
+                  type: "success"
+                });
+              } else {
+                this.$message({
+                  message: "登陆失败，请检查用户名账号密码",
+                  type: "error"
+                });
               }
             })
             .catch(function(error) {
