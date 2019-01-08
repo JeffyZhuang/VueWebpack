@@ -92,6 +92,7 @@ export default {
         backgroundRepeat: "no-repeat"
       },
       AccountForm: {
+        checked: "",
         userName: "",
         password: ""
       },
@@ -108,6 +109,9 @@ export default {
       checked: false
     };
   },
+  mounted: function() {
+    this.getCookies();
+  },
   methods: {
     submitLogin(formName) {
       this.$refs[formName].validate(valid => {
@@ -122,6 +126,20 @@ export default {
           })
             .then(response => {
               if (response.data.code === 0) {
+                //判断记录登陆状态
+                debugger
+                if (this.checked == true) {
+                  console.log("checked==true");
+                  this.setCookies(
+                    this.AccountForm.userName,
+                    this.AccountForm.password,
+                    7
+                  );
+                } else {
+                  console.log("清空cookies");
+                  this.clearCookies();
+                }
+
                 //将token设置到session当中
                 var session = window.sessionStorage;
                 var token = JSON.stringify(response.data.data.Authorization);
@@ -146,6 +164,34 @@ export default {
     //清空表单
     resetForm(formName) {
       this.$refs[formName].resetFields();
+    },
+    //设置cookies
+    setCookies(name, pass, exday) {
+      var exdate = new Date();
+      exdate.setTime(exdate.getTime() + 24 * 60 * 60 * 1000 * exday);
+      document.cookie =
+        "userName=" + name + ";path=/;expires=" + exdate.toLocaleDateString();
+      document.cookie =
+        "password=" + pass + ";path=/;expires=" + exdate.toLocaleDateString();
+    },
+    //获取cookies
+    getCookies() {
+      if (document.cookie.length > 0) {
+        var arr = document.cookie.split(";");
+        console.log(arr);
+        for (var i = 0; i < arr.length; i++) {
+          var arr2 = arr[i].split("=");
+          if (arr2[0] == "userName") {
+            this.userName = arr2[1];
+          } else if (arr2[0] == "password") {
+            this.password = arr2[1];
+          }
+        }
+      }
+    },
+    //清除cookies
+    clearCookies() {
+      this.setCookies("", "", -1);
     }
   }
 };
