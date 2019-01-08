@@ -11,7 +11,7 @@
         :rules="rules"
         class="demo-ruleForm login-container"
       >
-        <div class="sub-title">登陆</div>
+        <div class="sub-title">登录</div>
         <div class="formGroup">
           <el-form-item label="账号" prop="userName">
             <el-input
@@ -111,7 +111,6 @@ export default {
   methods: {
     submitLogin(formName) {
       this.$refs[formName].validate(valid => {
-        //var userVo = JSON.stringify(this.AccountForm);
         if (valid) {
           this.$http({
             method: "post",
@@ -123,13 +122,7 @@ export default {
           })
             .then(response => {
               if (response.data.code === 0) {
-                debugger;
-                // this.$message({
-                //   message: "登陆成功",
-                //   type: "success"
-                // });
                 //将token设置到session当中
-
                 var session = window.sessionStorage;
                 var token = JSON.stringify(response.data.data.Authorization);
                 session.setItem("Authorization", token);
