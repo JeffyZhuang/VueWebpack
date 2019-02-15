@@ -44,6 +44,7 @@ module.exports = {
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         loader: 'url-loader',
+        exclude:[path.resolve(__dirname,'../src/icons')],
         options: {
           limit: 10000,
           name: utils.assetsPath('img/[name].[hash:7].[ext]')
@@ -63,6 +64,13 @@ module.exports = {
         options: {
           limit: 10000,
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
+        }
+      },{
+        test:/\.svg$/,
+        loader:'svg-sprite-loader',
+        include:[path.resolve(__dirname,'../src/icons')],
+        options:{
+          //symbolId:'icon-[name]'  //这个没有生效，生效的是默认的name
         }
       }
     ]

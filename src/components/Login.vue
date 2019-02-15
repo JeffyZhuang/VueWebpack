@@ -56,6 +56,11 @@
             >登录</el-button>
           </el-form-item>
         </div>
+        <div>
+          没有账号？点击
+          <router-link class="registerCss" :to="{name:'register'}" target = _blank >注册</router-link>
+          <!-- <a href="/#/register" class="registerCss">注册</a> -->
+        </div>
       </el-form>
     </div>
   </div>
@@ -98,12 +103,10 @@ export default {
       },
       rules: {
         userName: [
-          { validator: validateUserName, trigger: "blur" }
-          //{ validator: validaePass }
+          { required: true, validator: validateUserName, trigger: "blur" }
         ],
         password: [
-          { validator: validatePassword, trigger: "blur" }
-          //{ validator: validaePass2 }
+          { required: true, validator: validatePassword, trigger: "blur" }
         ]
       },
       checked: false
@@ -127,7 +130,7 @@ export default {
             .then(response => {
               if (response.data.code === 0) {
                 //判断记录登陆状态
-                debugger
+                debugger;
                 if (this.checked == true) {
                   console.log("checked==true");
                   this.setCookies(
@@ -147,7 +150,7 @@ export default {
                 this.$router.push("/helloWorld");
               } else {
                 this.$message({
-                  message: "登陆失败，请检查用户名账号密码",
+                  message: response.data.data,
                   type: "error"
                 });
               }
@@ -232,6 +235,7 @@ label {
   text-align: right;
   font-size: 14px;
   font-family: PingFang SC;
+  color: royalblue;
 }
 .remFor {
   margin-bottom: 10px;
@@ -245,7 +249,7 @@ label {
   font-size: 25px;
 }
 .sub-title {
-  color: #909399;
+  color: #676a6e;
   font-family: PingFang SC;
   text-align: center;
   font-size: 24px;
@@ -253,6 +257,10 @@ label {
 }
 .formButton {
   padding-left: 25px;
+}
+.registerCss {
+  font-family: PingFang SC;
+  color: royalblue;
 }
 .el-form-item__error {
   margin-left: 77px;
