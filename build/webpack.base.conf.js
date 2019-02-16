@@ -42,15 +42,6 @@ module.exports = {
         include: [resolve('src'), resolve('test'), resolve('node_modules/webpack-dev-server/client')]
       },
       {
-        test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
-        loader: 'url-loader',
-        exclude:[path.resolve(__dirname,'../src/icons')],
-        options: {
-          limit: 10000,
-          name: utils.assetsPath('img/[name].[hash:7].[ext]')
-        }
-      },
-      {
         test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
         loader: 'url-loader',
         options: {
@@ -64,13 +55,6 @@ module.exports = {
         options: {
           limit: 10000,
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
-        }
-      },{
-        test:/\.svg$/,
-        loader:'svg-sprite-loader',
-        include:[path.resolve(__dirname,'../src/icons')],
-        options:{
-          //symbolId:'icon-[name]'  //这个没有生效，生效的是默认的name
         }
       }
     ]

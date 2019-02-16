@@ -147,7 +147,8 @@ export default {
                 var session = window.sessionStorage;
                 var token = JSON.stringify(response.data.data.Authorization);
                 session.setItem("Authorization", token);
-                this.$router.push("/helloWorld");
+                session.setItem("user", this.AccountForm.userName);
+                this.$router.push("/home");
               } else {
                 this.$message({
                   message: response.data.data,
